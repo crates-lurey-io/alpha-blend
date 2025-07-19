@@ -5,7 +5,7 @@ license = "MIT"
 
 description = "Alpha blending and compositing"
 repository = "https://github.com/crates-lurey-io/alpha-blend"
-version = "0.1.1"
+version = "0.1.2"
 
 [lints.clippy]
 pedantic = "deny"
