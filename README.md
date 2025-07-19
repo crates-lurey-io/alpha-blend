@@ -3,7 +3,7 @@
 Alpha blending and compositing in (optionally) zero-dependency Rust.
 
 [![Test](https://github.com/crates-lurey-io/alpha-blend/actions/workflows/test.yml/badge.svg)](https://github.com/crates-lurey-io/alpha-blend/actions/workflows/test.yml)
-[![Docs](https://github.com/crates-lurey-io/alpha-blend/actions/workflows/docs.yml/badge.svg)](https://github.com/alpha-blend/pxldraw/actions/workflows/docs.yml)
+[![Docs](https://github.com/crates-lurey-io/alpha-blend/actions/workflows/docs.yml/badge.svg)](https://github.com/crates-lurey-io/alpha-blend/actions/workflows/docs.yml)
 [![Crates.io Version](https://img.shields.io/crates/v/alpha-blend)](https://crates.io/crates/alpha-blend)
 [![codecov](https://codecov.io/gh/crates-lurey-io/alpha-blend/graph/badge.svg?token=Z3VUWA3WYY)](https://codecov.io/gh/crates-lurey-io/alpha-blend)
 

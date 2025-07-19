@@ -41,7 +41,7 @@ doc-check:
 doc-gen:
     cargo clean --doc
     RUSTDOCFLAGS="-D warnings" cargo doc --no-deps
-    echo '<meta http-equiv="refresh" content="0;url=alpha-blend/index.html">' > target/doc/index.html
+    echo '<meta http-equiv="refresh" content="0;url=alpha_blend/index.html">' > target/doc/index.html
     rm target/doc/.lock
 
 test *ARGS:
