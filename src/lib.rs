@@ -1,14 +1,30 @@
 //! Alpha blending and compositing in (optionally) zero-dependency Rust.
 //!
+//! ## Examples
+//!
+//! The [`RgbaBlend`] trait defines a method for blending two RGBA colors together, and the
+//! [`BlendMode`] enum provides various blending modes based on Porter-Duff coefficients; for
+//! example [`BlendMode::SourceOver`] blends the source color over the destination color using
+//! [`PorterDuff::SRC_OVER`][].
+//!
+//! [`PorterDuff::SRC_OVER`]: `crate::porter_duff::PorterDuff::SRC_OVER`
+//!
+//! ```rust
+//! use alpha_blend::{rgba::F32x4Rgba, BlendMode, RgbaBlend};
+//!
+//! let src = F32x4Rgba { r: 1.0, g: 0.0, b: 0.0, a: 0.5 }; // Semi-transparent red
+//! let dst = F32x4Rgba { r: 0.0, g: 0.0, b: 1.0, a: 1.0 }; // Opaque blue
+//! let blended = BlendMode::SourceOver.apply(src, dst);
+//!
+//! // A mixed color of red and blue with alpha blending
+//! assert_eq!(blended, F32x4Rgba { r: 0.5, g: 0.0, b: 0.5, a: 0.75 });
+//! ```
+//!
 //! ## Features
 //!
 //! By default, this crate is `no_std` compatible, and uses [`libm`] for some math operations.
 //!
-//! ### `std`
-//!
-//! Uses the standard library for math operations, such as `f32::round`.
-//!
-//! Removes the dependency on `libm`.
+//! Either `std` or `libm` must be enabled.
 //!
 //! ### `bytemuck`
 //!
@@ -25,6 +41,10 @@
 //! _This feature is enabled by default._
 //!
 //! Enables the `arch` feature of `libm`.
+//!
+//! ### `std`
+//!
+//! Uses the standard library for math operations, such as `f32::round`.
 
 #![cfg_attr(not(feature = "std"), no_std)]
 
