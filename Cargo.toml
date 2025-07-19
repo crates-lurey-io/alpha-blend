@@ -5,7 +5,7 @@ license = "MIT"
 
 description = "Alpha blending and compositing"
 repository = "https://github.com/crates-lurey-io/alpha-blend"
-version = "0.1.0"
+version = "0.1.1"
 
 [lints.clippy]
 pedantic = "deny"
@@ -21,15 +21,14 @@ taplo-cli = { version = "0.10.0", bins = ["taplo"] }
 
 [dependencies]
 bytemuck = { version = "1.23.1", optional = true }
+libm = { version = "0.2.15", default-features = false, optional = true }
 
 [features]
 std = []
-default = ["libm-arch"]
+default = ["libm", "libm-arch"]
+libm = ["dep:libm"]
 libm-arch = ["libm/arch"]
 bytemuck = ["dep:bytemuck"]
-
-[target.'cfg(not(feature = "std"))'.dependencies]
-libm = { version = "0.2.15", default-features = false }
 
 [dev-dependencies]
 bytemuck = "1.23.1"

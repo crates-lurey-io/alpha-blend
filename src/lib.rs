@@ -14,9 +14,15 @@
 //!
 //! Enables the `bytemuck` crate for zero-copy conversions between types.
 //!
+//! ### `libm`
+//!
+//! _This feature is enabled by default._
+//!
+//! Uses the `libm` crate for math operations.
+//!
 //! ### `libm-arch`
 //!
-//! _This feature is enabled by default if `std` is not enabled_.
+//! _This feature is enabled by default._
 //!
 //! Enables the `arch` feature of `libm`.
 
