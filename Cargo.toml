@@ -1,0 +1,41 @@
+[package]
+name = "alpha-blend"
+edition = "2024"
+license = "MIT"
+
+description = "Alpha blending and compositing"
+repository = "https://github.com/crates-lurey-io/alpha-blend"
+version = "0.1.0"
+
+[lints.clippy]
+pedantic = "deny"
+
+[workspace]
+members = ["tools/cargo-bin"]
+
+[workspace.metadata.bin]
+cargo-nextest = { version = "0.9.98", locked = true }
+cargo-llvm-cov = { version = "0.6.16", locked = true }
+just = { version = "1.40.0" }
+taplo-cli = { version = "0.10.0", bins = ["taplo"] }
+
+[dependencies]
+bytemuck = { version = "1.23.1", optional = true }
+
+[features]
+std = []
+default = ["libm-arch"]
+libm-arch = ["libm/arch"]
+bytemuck = ["dep:bytemuck"]
+
+[target.'cfg(not(feature = "std"))'.dependencies]
+libm = { version = "0.2.15", default-features = false }
+
+[dev-dependencies]
+bytemuck = "1.23.1"
+png = "0.17.16"
+
+[[example]]
+name = "porter-duff"
+path = "examples/porter-duff.rs"
+required-features = ["bytemuck"]
