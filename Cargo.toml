@@ -5,7 +5,7 @@ license = "MIT"
 
 description = "Alpha blending and compositing"
 repository = "https://github.com/crates-lurey-io/alpha-blend"
-version = "0.2.0"
+version = "0.2.1"
 rust-version = "1.85"
 
 [lints.rust]

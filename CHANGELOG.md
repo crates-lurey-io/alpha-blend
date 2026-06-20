@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2026-06-20
+
+### Fixed
+
+- `U8x4Rgba::source_over` alpha channel now uses the correct Porter-Duff SRC_OVER
+  formula: `out_a = src_a + dst_a * (1 - src_a)`. Previously used `a*a` which
+  produced values too low for partially-transparent sources (#31).
+
+### Changed
+
+- Replaced `source_over_agrees_with_f32_path` test with `source_over_expected_values`
+  comparing against hand-computed standard values (the f32 path has the same bug).
+
 ## [0.2.0] - 2026-06-20
 
 ### Added
