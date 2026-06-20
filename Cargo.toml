@@ -28,7 +28,6 @@ cargo-llvm-cov = { version = "0.6.16", locked = true }
 cargo-hack = { version = "0.6.45", locked = true }
 cargo-semver-checks = { version = "0.48.0", locked = true }
 just = { version = "1.40.0" }
-taplo-cli = { version = "0.10.0", bins = ["taplo"] }
 
 [dependencies]
 bytemuck = { version = "1.23.1", optional = true }
