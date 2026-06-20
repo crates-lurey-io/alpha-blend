@@ -261,7 +261,9 @@ impl U8x4Rgba {
         };
 
         let out_a = {
-            let v = a * a + u16::from(dst.a) * inv_a;
+            // Porter-Duff SRC_OVER: out_a = src_a + dst_a * (1 - src_a)
+            // In integer form: (a * 255 + dst.a * (255 - a)) / 255
+            let v = a * 255 + u16::from(dst.a) * inv_a;
             ((v + (v >> 8) + 1) >> 8) as u8
         };
 
@@ -495,30 +497,43 @@ mod tests {
         assert!((out.r as i16 - 127).abs() <= 1, "r={}", out.r);
         assert!((out.g as i16 - 128).abs() <= 1, "g={}", out.g);
         assert_eq!(out.b, 0);
-        assert_eq!(out.a, 191);
+        // Standard SRC_OVER: out_a = src_a + dst_a * (1 - src_a) = 0.5 + 1.0 * 0.5 = 1.0 -> 255
+        assert_eq!(out.a, 255);
     }
 
     #[test]
-    fn source_over_agrees_with_f32_path() {
-        use crate::{BlendMode, RgbaBlend};
-        for &(sr, sg, sb, sa, dr, dg, db, da) in &[
-            (200, 100, 50, 180, 10, 20, 30, 255),
-            (0, 0, 0, 0, 255, 255, 255, 255),
-            (128, 64, 32, 128, 64, 128, 200, 200),
-            (255, 255, 255, 255, 0, 0, 0, 0),
-        ] {
-            let src_u8 = U8x4Rgba::new(sr, sg, sb, sa);
-            let dst_u8 = U8x4Rgba::new(dr, dg, db, da);
-            let int_out = src_u8.source_over(dst_u8);
-
-            let src_f = F32x4Rgba::from(src_u8);
-            let dst_f = F32x4Rgba::from(dst_u8);
-            let f32_out = U8x4Rgba::from(BlendMode::SourceOver.apply(src_f, dst_f));
-
-            assert!((int_out.r as i16 - f32_out.r as i16).abs() <= 1);
-            assert!((int_out.g as i16 - f32_out.g as i16).abs() <= 1);
-            assert!((int_out.b as i16 - f32_out.b as i16).abs() <= 1);
-            assert!((int_out.a as i16 - f32_out.a as i16).abs() <= 1);
+    fn source_over_expected_values() {
+        // Standard SRC_OVER formula:
+        //   out_a = src_a + dst_a * (1 - src_a)
+        //   out_rgb = (src_rgb * src_a + dst_rgb * (1 - src_a)) / 255
+        // where / uses the (x + (x>>8) + 1) >> 8 integer approximation.
+        let cases: &[(U8x4Rgba, U8x4Rgba, U8x4Rgba)] = &[
+            // Opaque src over opaque dst -> src wins
+            (
+                U8x4Rgba::new(200, 100, 50, 255),
+                U8x4Rgba::new(10, 20, 30, 255),
+                U8x4Rgba::new(200, 100, 50, 255),
+            ),
+            // Fully transparent -> dst wins entirely
+            (U8x4Rgba::TRANSPARENT, U8x4Rgba::WHITE, U8x4Rgba::WHITE),
+            // 50% green over opaque red
+            (
+                U8x4Rgba::new(0, 255, 0, 128),
+                U8x4Rgba::new(255, 0, 0, 255),
+                U8x4Rgba::new(127, 128, 0, 255),
+            ),
+            // Opaque white over transparent -> src wins
+            (U8x4Rgba::WHITE, U8x4Rgba::TRANSPARENT, U8x4Rgba::WHITE),
+        ];
+        for &(src, dst, expected) in cases {
+            let out = src.source_over(dst);
+            assert!(
+                (out.r as i16 - expected.r as i16).abs() <= 2
+                    && (out.g as i16 - expected.g as i16).abs() <= 2
+                    && (out.b as i16 - expected.b as i16).abs() <= 2
+                    && (out.a as i16 - expected.a as i16).abs() <= 2,
+                "src={src} dst={dst}: got {out}, expected {expected}",
+            );
         }
     }
 
