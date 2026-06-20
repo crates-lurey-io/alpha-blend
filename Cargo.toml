@@ -5,10 +5,19 @@ license = "MIT"
 
 description = "Alpha blending and compositing"
 repository = "https://github.com/crates-lurey-io/alpha-blend"
-version = "0.1.2"
+version = "0.2.0"
+rust-version = "1.85"
+
+[lints.rust]
+missing_docs = "warn"
+unreachable_pub = "warn"
+unused_qualifications = "warn"
 
 [lints.clippy]
-pedantic = "deny"
+all = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+nursery = { level = "deny", priority = -1 }
+must_use_candidate = "deny"
 
 [workspace]
 members = ["tools/cargo-bin"]
@@ -16,6 +25,8 @@ members = ["tools/cargo-bin"]
 [workspace.metadata.bin]
 cargo-nextest = { version = "0.9.98", locked = true }
 cargo-llvm-cov = { version = "0.6.16", locked = true }
+cargo-hack = { version = "0.6.45", locked = true }
+cargo-semver-checks = { version = "0.48.0", locked = true }
 just = { version = "1.40.0" }
 taplo-cli = { version = "0.10.0", bins = ["taplo"] }
 

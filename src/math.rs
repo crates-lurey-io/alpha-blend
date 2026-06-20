@@ -1,3 +1,5 @@
+#![allow(unreachable_pub)]
+
 #[cfg(feature = "std")]
 extern crate std;
 

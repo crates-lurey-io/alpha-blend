@@ -16,6 +16,7 @@ use crate::{
 ///
 /// [`BlendMode`]: crate::BlendMode
 /// [Porter-Duff coefficients]: https://en.wikipedia.org/wiki/Alpha_compositing#Alpha_blending
+#[derive(Debug, Clone, Copy)]
 pub struct PorterDuff<C, F: Fn(C, C) -> C> {
     /// Computes the source alpha given the source and destination alpha values.
     src: F,
@@ -28,7 +29,8 @@ pub struct PorterDuff<C, F: Fn(C, C) -> C> {
 }
 
 impl<C, F: Fn(C, C) -> C> PorterDuff<C, F> {
-    const fn new(src: F, dst: F) -> Self {
+    /// Creates a new `PorterDuff` with the given source and destination coefficient functions.
+    pub const fn new(src: F, dst: F) -> Self {
         Self {
             src,
             dst,

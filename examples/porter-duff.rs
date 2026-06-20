@@ -1,3 +1,5 @@
+#![allow(missing_docs)]
+
 extern crate std;
 use alpha_blend::{
     BlendMode, RgbaBlend,

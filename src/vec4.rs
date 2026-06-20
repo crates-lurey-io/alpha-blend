@@ -1,11 +1,13 @@
 use core::{
-    mem,
+    mem::{self, size_of},
     ops::{Add, Mul},
 };
 
 use crate::rgba::F32x4Rgba;
 
 /// Vector with four [`f32`] components.
+#[derive(Debug, Clone, Copy, PartialEq)]
+#[repr(C)]
 pub struct F32x4 {
     /// The `w` lane, the first component.
     pub w: f32,
@@ -22,12 +24,14 @@ pub struct F32x4 {
 
 impl From<F32x4Rgba> for F32x4 {
     fn from(rgba: F32x4Rgba) -> Self {
+        const _: () = assert!(size_of::<F32x4Rgba>() == size_of::<F32x4>());
         unsafe { mem::transmute(rgba) }
     }
 }
 
 impl From<F32x4> for F32x4Rgba {
     fn from(vec: F32x4) -> Self {
+        const _: () = assert!(size_of::<F32x4Rgba>() == size_of::<F32x4>());
         unsafe { mem::transmute(vec) }
     }
 }
@@ -63,6 +67,7 @@ impl F32x4 {
     /// Returns the RGBA-equivalent of this `Cx4<f32>`.
     #[must_use]
     pub const fn into_rgba(self) -> F32x4Rgba {
+        const _: () = assert!(size_of::<F32x4Rgba>() == size_of::<F32x4>());
         unsafe { mem::transmute(self) }
     }
 }
@@ -71,7 +76,7 @@ impl Add<f32> for F32x4 {
     type Output = Self;
 
     fn add(self, rhs: f32) -> Self::Output {
-        F32x4 {
+        Self {
             w: self.w + rhs,
             x: self.x + rhs,
             y: self.y + rhs,
@@ -80,11 +85,11 @@ impl Add<f32> for F32x4 {
     }
 }
 
-impl Add<F32x4> for F32x4 {
+impl Add<Self> for F32x4 {
     type Output = Self;
 
-    fn add(self, rhs: F32x4) -> Self::Output {
-        F32x4 {
+    fn add(self, rhs: Self) -> Self::Output {
+        Self {
             w: self.w + rhs.w,
             x: self.x + rhs.x,
             y: self.y + rhs.y,
@@ -97,7 +102,7 @@ impl Mul<f32> for F32x4 {
     type Output = Self;
 
     fn mul(self, rhs: f32) -> Self::Output {
-        F32x4 {
+        Self {
             w: self.w * rhs,
             x: self.x * rhs,
             y: self.y * rhs,
@@ -106,11 +111,11 @@ impl Mul<f32> for F32x4 {
     }
 }
 
-impl Mul<F32x4> for F32x4 {
+impl Mul<Self> for F32x4 {
     type Output = Self;
 
-    fn mul(self, rhs: F32x4) -> Self::Output {
-        F32x4 {
+    fn mul(self, rhs: Self) -> Self::Output {
+        Self {
             w: self.w * rhs.w,
             x: self.x * rhs.x,
             y: self.y * rhs.y,
